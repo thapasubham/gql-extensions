@@ -82,9 +82,6 @@
           {TYPE_LABELS[type]}
         </label>
       {/each}
-      <p>
-        <span class="dot" style="background: var(--error-color)"> {store.requests.length}</span>
-      </p>
     </div>
   </footer>
 </div>
