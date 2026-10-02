@@ -22,13 +22,16 @@
   }
 </script>
 
-{#snippet headerList(headers: Record<string, string>)}
-  <dl>
-    {#each Object.entries(headers) as [name, value] (name)}
-      <dt>{name}</dt>
-      <dd>{value}</dd>
-    {/each}
-  </dl>
+{#snippet headerSection(title: string, headers: Record<string, string>)}
+  <details open>
+    <summary>{title}</summary>
+    <dl>
+      {#each Object.entries(headers) as [name, value] (name)}
+        <dt>{name}</dt>
+        <dd>{value}</dd>
+      {/each}
+    </dl>
+  </details>
 {/snippet}
 
 <section class="detail">
@@ -89,8 +92,7 @@
         <pre>{formatJson(request.responseBody)}</pre>
       {/if}
     {:else}
-      <h4>General</h4>
-      {@render headerList({
+      {@render headerSection('General', {
         URL: request.url,
         Method: request.method,
         Status: String(request.status),
@@ -99,10 +101,8 @@
         'Request size': formatBytes(request.requestSize),
         'Response size': formatBytes(request.responseSize),
       })}
-      <h4>Response headers</h4>
-      {@render headerList(request.responseHeaders)}
-      <h4>Request headers</h4>
-      {@render headerList(request.requestHeaders)}
+      {@render headerSection('Response headers', request.responseHeaders)}
+      {@render headerSection('Request headers', request.requestHeaders)}
     {/if}
   </div>
 </section>
@@ -188,18 +188,26 @@
     word-break: break-word;
     user-select: text;
   }
-  h4 {
-    margin: 10px 0 4px;
-    font-weight: 600;
+  details {
+    margin: 10px 0;
   }
-  h4:first-child {
+  details:first-child {
     margin-top: 2px;
+  }
+  summary {
+    font-weight: 600;
+    cursor: pointer;
+    padding: 2px 0;
+    user-select: none;
+  }
+  summary::marker {
+    color: var(--muted);
   }
   dl {
     display: grid;
     grid-template-columns: minmax(100px, max-content) 1fr;
     gap: 2px 12px;
-    margin: 0;
+    margin: 6px 0 0;
   }
   dt {
     color: var(--muted);

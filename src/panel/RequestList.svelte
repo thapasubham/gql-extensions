@@ -1,7 +1,14 @@
 <script lang="ts">
-  import type { GraphQLRequest } from '../types';
+  import type { GraphQLOperationType, GraphQLRequest } from '../types';
   import { formatBytes, formatDuration } from '../lib/format';
   import Highlight from './Highlight.svelte';
+
+  const TYPE_LETTERS: Record<GraphQLOperationType, string> = {
+    query: 'Q',
+    mutation: 'M',
+    subscription: 'S',
+    unknown: 'O',
+  };
 
   let {
     requests,
@@ -35,39 +42,43 @@
 </script>
 
 <div class="list">
-  {#if requests.length === 0}
+  <!-- {#if requests.length === 0}
     <p class="empty">No GraphQL requests yet. Interact with the page or reload it.</p>
-  {:else}
+  {:else} -->
     <table role="grid" tabindex="0" {onkeydown}>
       <thead>
         <tr>
           <th>Operation</th>
-          <th>Type</th>
           <th>Status</th>
           <th>Time</th>
           <th>Size</th>
+          <th>URL</th>
         </tr>
       </thead>
       <tbody>
-        {#each requests as request (request.id)}
+      {#each requests as request, index (request.id)}
           <tr
             class:selected={request.id === selectedId}
+            class:background={index% 2 === 0}
             class:error={!!request.error}
             onclick={() => onselect(request.id)}
             use:scrollIntoViewIfSelected={request.id === selectedId}
           >
             <td class="name" title={request.url}>
+              <span class="badge {request.operationType}" title={request.operationType}>
+                {TYPE_LETTERS[request.operationType]}
+              </span>
               <Highlight text={request.operationName ?? '(anonymous)'} term={search} />
             </td>
-            <td><span class="badge {request.operationType}">{request.operationType}</span></td>
             <td>{request.status || '—'}</td>
             <td>{formatDuration(request.duration)}</td>
             <td>{formatBytes(request.responseSize)}</td>
+            <td>{request.url}</td>
           </tr>
         {/each}
       </tbody>
     </table>
-  {/if}
+  <!-- {/if} -->
 </div>
 
 <style>
@@ -76,10 +87,7 @@
     overflow: auto;
     min-width: 0;
   }
-  .empty {
-    padding: 16px;
-    color: var(--muted);
-  }
+
   table {
     width: 100%;
     border-collapse: collapse;
@@ -113,6 +121,9 @@
   tbody tr {
     cursor: pointer;
   }
+  tr.background {
+    background: var(--row-alt-bg);
+  }
   tbody tr:hover {
     background: var(--hover);
   }
@@ -124,10 +135,18 @@
     background: var(--selected);
   }
   .badge {
-    padding: 0 5px;
-    border-radius: 3px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    margin-right: 6px;
+    border-radius: 5px;
     color: var(--chip-color);
-    border: 1px solid var(--chip-color);
+    background: #343435;
     font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
+    vertical-align: middle;
   }
 </style>
