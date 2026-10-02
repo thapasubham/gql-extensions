@@ -4,5 +4,6 @@
   "version": "0.1.0",
   "description": "Capture, inspect and filter GraphQL requests in Chrome DevTools.",
   "minimum_chrome_version": "102",
-  "devtools_page": "devtools.html"
+  "devtools_page": "devtools.html",
+  "permissions": ["storage"]
 }

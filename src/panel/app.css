@@ -17,6 +17,7 @@
   --json-key: #b5631d;
   --json-string: #1a7f37;
   --mono: ui-monospace, Menlo, Consolas, monospace;
+  --mark-bg: #fff2a8;
 }
 
 [data-theme='dark'] {
@@ -38,6 +39,7 @@
   --unknown: #9aa0a6;
   --json-key: #e2a478;
   --json-string: #98c379;
+  --mark-bg: #5c4a1a;
 }
 
 .query { --chip-color: var(--query); }

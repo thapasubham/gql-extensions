@@ -1,14 +1,17 @@
 <script lang="ts">
   import type { GraphQLRequest } from '../types';
   import { formatBytes, formatDuration } from '../lib/format';
+  import Highlight from './Highlight.svelte';
 
   let {
     requests,
     selectedId,
+    search = '',
     onselect,
   }: {
     requests: GraphQLRequest[];
     selectedId: string | null;
+    search?: string;
     onselect: (id: string) => void;
   } = $props();
 
@@ -53,7 +56,9 @@
             onclick={() => onselect(request.id)}
             use:scrollIntoViewIfSelected={request.id === selectedId}
           >
-            <td class="name" title={request.url}>{request.operationName ?? '(anonymous)'}</td>
+            <td class="name" title={request.url}>
+              <Highlight text={request.operationName ?? '(anonymous)'} term={search} />
+            </td>
             <td><span class="badge {request.operationType}">{request.operationType}</span></td>
             <td>{request.status || '—'}</td>
             <td>{formatDuration(request.duration)}</td>

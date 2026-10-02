@@ -12,6 +12,8 @@
     unknown: 'Other',
   };
 
+  const ENABLED_TYPES_KEY = 'enabledTypes';
+
   let search = $state('');
   let enabledTypes = $state<Record<GraphQLOperationType, boolean>>({
     query: true,
@@ -21,6 +23,17 @@
   });
   let errorsOnly = $state(false);
   let selectedId = $state<string | null>(null);
+
+  chrome.storage.local.get(ENABLED_TYPES_KEY, (result) => {
+    const saved = result[ENABLED_TYPES_KEY] as Partial<Record<GraphQLOperationType, boolean>> | undefined;
+    if (saved) {
+      enabledTypes = { ...enabledTypes, ...saved };
+    }
+  });
+
+  $effect(() => {
+    chrome.storage.local.set({ [ENABLED_TYPES_KEY]: enabledTypes });
+  });
 
   const filtered = $derived.by(() => {
     const term = search.trim().toLowerCase();
@@ -43,12 +56,18 @@
     <button onclick={() => store.clear()} title="Clear requests">Clear</button>
     <input type="search" placeholder="Filter by operation, URL or query" bind:value={search} />
     <label><input type="checkbox" bind:checked={errorsOnly} /> Errors only</label>
-    <label><input type="checkbox" bind:checked={store.preserveLog} /> Preserve log</label>
+    <label>
+      <input
+        type="checkbox"
+        checked={store.preserveLog}
+        onchange={(e) => store.setPreserveLog(e.currentTarget.checked)}
+      /> Preserve log
+    </label>
     <span class="count">{filtered.length} / {store.requests.length}</span>
   </header>
 
   <main>
-    <RequestList requests={filtered} {selectedId} onselect={(id) => (selectedId = id)} />
+    <RequestList requests={filtered} {selectedId} {search} onselect={(id) => (selectedId = id)} />
     {#if selected}
       <RequestDetail request={selected} onclose={() => (selectedId = null)} />
     {/if}
