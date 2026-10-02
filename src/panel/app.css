@@ -1,0 +1,86 @@
+:root {
+  --fg: #1f1f1f;
+  --bg: #ffffff;
+  --muted: #5f6368;
+  --border: #d0d0d0;
+  --row-border: #f0f0f0;
+  --toolbar-bg: #f3f3f3;
+  --hover: #f0f6fe;
+  --selected: #cfe8fc;
+  --accent: #1a73e8;
+  --error: #d93025;
+  --error-bg: #fce8e6;
+  --query: #34a853;
+  --mutation: #5c6bc0;
+  --subscription: #9334e6;
+  --unknown: #80868b;
+  --json-key: #b5631d;
+  --json-string: #1a7f37;
+  --mono: ui-monospace, Menlo, Consolas, monospace;
+}
+
+[data-theme='dark'] {
+  color-scheme: dark;
+  --fg: #e3e3e3;
+  --bg: #202124;
+  --muted: #9aa0a6;
+  --border: #3c4043;
+  --row-border: #2a2b2e;
+  --toolbar-bg: #292a2d;
+  --hover: #2a3442;
+  --selected: #0b4a7c;
+  --accent: #8ab4f8;
+  --error: #f28b82;
+  --error-bg: #3c1f1e;
+  --query: #81c995;
+  --mutation: #8c9eff;
+  --subscription: #c58af9;
+  --unknown: #9aa0a6;
+  --json-key: #e2a478;
+  --json-string: #98c379;
+}
+
+.query { --chip-color: var(--query); }
+.mutation { --chip-color: var(--mutation); }
+.subscription { --chip-color: var(--subscription); }
+.unknown { --chip-color: var(--unknown); }
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  font: 12px system-ui, sans-serif;
+  color: var(--fg);
+  background: var(--bg);
+}
+
+button,
+input {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 2px 8px;
+}
+
+input[type='search'] {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 3px 6px;
+}
+
+label {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  white-space: nowrap;
+}
